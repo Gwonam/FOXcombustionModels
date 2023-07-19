@@ -1,0 +1,26 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+blockMesh > log.blockMesh
+
+decomposePar -force -time 0 > log.decomposePar
+
+mpirun -np 8 reactingFoam -parallel > log.initialRun
+
+reconstructPar -time 0.02 > log.reconstructPar
+
+sed -i s/"startTime       0;"/"startTime       0.02;"/g system/controlDict
+
+setFields > log.setFields
+
+decomposePar -force -time 0,0.02 >> log.decomposePar
+
+sed -i s/"endTime         0.02;"/"endTime         0.1;"/g system/controlDict
+
+mpirun -np 8 reactingFoam -parallel > log.ignitionRun
+
+reconstructPar
+
+#------------------------------------------------------------------------------

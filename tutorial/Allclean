@@ -1,0 +1,16 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/CleanFunctions      # Tutorial clean functions
+#------------------------------------------------------------------------------
+
+rm -r constant/polyMesh
+rm -r 0.*
+rm -r [123456789]*
+rm -r processor*
+rm log.*
+
+sed -i s/"startTime       0.02;"/"startTime       0;"/g system/controlDict
+
+sed -i s/"endTime         0.1;"/"endTime         0.02;"/g system/controlDict
+
+#------------------------------------------------------------------------------

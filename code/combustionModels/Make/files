@@ -1,0 +1,4 @@
+foxPaSR/foxPaSRs.C
+renPaSR/renPaSRs.C
+
+LIB = $(FOAM_USER_LIBBIN)/libFOXcombustionModels
